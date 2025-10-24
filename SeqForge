@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+#-- Help function --#
+show_help() {
+  echo "Usage: SeqForge <subcommand> [options]"
+  echo ""
+  echo "Subcommands:"
+  echo "  genopipe   Pair, filter, map, and call genetic variants using paired-end Illumina reads."
+  echo "  vcfpipe    Filter genetic variants contained with a VCF file."
+  echo ""
+}
+
+#-- Dispatcher --#
+set -euo pipefail
+
+SUBCOMMAND=${1:-}
+[[ $# -gt 0 ]] && shift
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+case "$SUBCOMMAND" in
+  help|-h|--help)
+    show_help
+    ;;
+  genopipe)
+    "${SCRIPT_DIR}/genopipe.sh" "$@"
+    ;;
+  vcfpipe)
+    "${SCRIPT_DIR}/vcfpipe.sh" "$@"
+    ;;
+  "")
+    echo "Error: No subcommand provided."
+    echo
+    show_help
+    exit 1
+    ;;
+  *)
+    echo "Unknown command: $SUBCOMMAND"
+    show_help
+    exit 1
+    ;;
+esac
