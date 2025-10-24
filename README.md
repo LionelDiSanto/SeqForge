@@ -30,17 +30,16 @@ In summary, **SeqForge** provides a unified and systematic framework to take raw
 # Installation
 1. Clone the repository
 ```
-git clone https://github.com/LionelDiSanto/GenoPipe.git
-cd GenoPipe
+git clone https://github.com/LionelDiSanto/SeqForge.git
+cd SeqForge
 ```
 2. Convert files from DOS line endings to Unix line endings (if needed) and make the script executable
 ```
-dos2unix GenoPipe
-chmod +x GenoPipe
+dos2unix * && chmod +x *
 ```
 3. Add the program to your path to execute it without the need to provide the (full) path to the script:
 ```
-export PATH=/path_to_GenoPipe/GenoPipe/:$PATH
+export PATH=/path_to_SeqForge/SeqForge/:$PATH
 ```
 
 # _**Genopipe**_: Descrption and Usage Details
