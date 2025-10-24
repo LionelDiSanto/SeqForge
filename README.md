@@ -32,7 +32,7 @@ In summary, **SeqForge** provides a unified and systematic framework to take raw
 # _**Genopipe**_: Descrption and Usage Details
 
 ## Overview of _**Genopipe**_
-**Genopipe** is a bash-based pipeline for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
+**Genopipe** is a bash-based module of SeqForge for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
 
 ## Key Features
 * **Illumina Read Compatibility**: Specifically designed to process paired-end (PE) read files generated using Illumina technologies that adhere to the CASAVA 1.8+ FASTQ header format.
@@ -41,7 +41,7 @@ In summary, **SeqForge** provides a unified and systematic framework to take raw
 * **Flexible Mapping**: Aligns the filtered paired-end reads to a user-provided reference genome using either _Bowtie2_ or _BWA mem_.
 * **Duplicate Handling**: Removes PCR duplicates using _SAMtools_ to prevent artifacts and ensure accurate variant calling.
 * **Comprehensive Variant Calling**: Performs the final genetic analysis, calling both Single Nucleotide Polymorphisms (SNPs) and small Insertions/Deletions (Indels) in the mapped data using _BCFtools_.
-* **End-to-End Automation**: Provides a single, automated pipeline that links all steps — from raw demultiplexed read sorting, synchronization, and filtering to the final VCF file.
+* **End-to-End Automation**: Provides a single, automated module that links all steps — from raw demultiplexed read sorting, synchronization, and filtering to the final VCF file.
 
 ## What does Genopipe Do?
 
@@ -94,16 +94,16 @@ To run, **genopipe** requires the creation of a working directory containing a m
 
 **IMPORTANT**: The module uses specific patterns in file names to run and hence all sequence files _**MUST MUST MUST**_ follow a specific naming convention! If read files provided are not yet filtered then they must be named as PopulationID_SampleID.F.fq.gz (read 1 - forward) and PopulationID_SampleID.R.fq.gz (read 2 - reverse). If read files provided are already filtered then they must be named PopulationID_SampleID.R1.fq.gz (read 1 - forward) and PopulationID_SampleID.R2.fq.gz (read 2 - reverse). If read files are already aligned (input alignment files must be sorted and in bam format): PopulationID_SampleID.bam.
 
-### Running the Pipeline
-The pipeline is executed via a single command passing necessary parameters:
+### Running the module
+The module is executed via a single command passing necessary parameters:
 ```
-GenoPipe [options] <reference_genome> <working_directory> <mode>
-GenoPipe version (to print the version of the software)
+SeqForge genopipe [options] <reference_genome> <working_directory> <mode>
+SeqForge genopipe version (to print the version of the software)
 
 Example:
-GenoPipe --threads 8 Arabidopsis_thaliana.fa GenoPipe/my_working_dir/ all
+SeqForge genopipe --threads 8 Arabidopsis_thaliana.fa genopipe/my_working_dir/ all
 
-In this example, the working director "GenoPipe/my_working_dir/" must contain:
+In this example, the working director "genopipe/my_working_dir/" must contain:
 - The reference genome of Arabidopsis thaliana: Arabidopsis_thaliana.fa
 - At least two FATSQ files: e.g., Pop1_Samp1.F.fq.gz and Pop1_Samp1.R.fq.gz
 ```
@@ -151,16 +151,16 @@ Options to be passed to the module:
     -p, --ploidy            <integer>   Ploidy of samples assumed for analysis [default: 2 (diploid)].
     -d, --depth             <integer>   Number of reads considered per BAM file for SNP calling [default: 250].
     -m, --match             <integer>   Matching score to be passed to aligner [default: 1]. Note that this parameter is needed only when using BWA mem 
-                                        as the read mapping module.
+                                        as the read mapping program.
     -i, --mismatch          <integer>   Mismatch penalty score to be passed to aligner [default: 4].
     -o, --gapopen           <integer>   Gap open penalty score to be passed to aligner [default: 6].
     -q, --min-mapQual       <integer>   If -u, --1m-concordant is specified, then specifying a value > 0 for this argument will implement an additional
                                         filter where alignments with a mapping quality less than this value will be discarded from BAM files [default: 20].
-                                        Specifying a value of 0 disables this filter.   
+                                        Specifying a value of 0 disables this filter.     
 ```
 
 ### Output Files
-The pipeline generates several intermediate and final repositories and files in the working directory. Key files and repositories per process are:
+The module generates several intermediate and final repositories and files in the working directory. Key files and repositories per process are:
 
 | Process | Key output |
 |:------------|:-------------|
@@ -169,8 +169,6 @@ The pipeline generates several intermediate and final repositories and files in 
 | Mapping of filtered reads onto the reference genome | - Alignment files: end in "`.bam`" (one per sample) <br> - If the aligner selected is `bowtie2`: a file entitled "`bowtie2.log`" containing statistics relative to the alignment of filtered reads to the reference genome for each sample |
 | Removal of PCR duplicates from alignment files (if `--no-depup` is **NOT** specified) | - Alignment files: end in "`.markdup.bam`" (one per sample) <br> - A repository entitled "`Duplicated`": contains the unduplicated alignment files (one per sample) <br> - A repository entitled "`DeDupStats`": contains descriptive reports on the removal of PCR duplicates by `SAMtools` (one per sample)|
 | Calling of genetic variants (SNPs and Indels) | A compressed (gzipped) VCF file containing raw genetic variants called: `RawSNPs.vcf.gz` |
-
-For a pipeline designed to filter VCF files to retain only high quality genetic variant, see https://github.com/LionelDiSanto/VCF-Sentry
 
 # _**VCFpipe**_: Description and Usage Details
 
