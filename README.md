@@ -319,7 +319,10 @@ Bonfield, J.K., Marshall, J., Danecek, P., Li, H., Ohan, V., Whitwham, A., Keane
 R Core Team (2025). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria. https://www.R-project.org/
 
 # Contacts
+For questions or to report issues, please contact Dr. Lionel Di Santo (lionel.disanto@unibas.ch).
 
 # How to cite **SeqForge**?
+_coming soon_
 
 # Contribution
+**Want to make SeqForge better?** We highly encourage contributions! Whether it's reporting a bug, suggesting a new feature for genopipe or vcfpipe, or submitting code, your efforts are valuable.
