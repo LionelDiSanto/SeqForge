@@ -288,6 +288,35 @@ The module generates several intermediate and final files in the working directo
 | keep_paralogs.txt | File listing variant sites _**NOT**_ identified as paralogs (two columns: 1/ Chromosome ID, 2/ Position of the variant on the chromosome) |
 
 # References
+**SeqForge** make use of different published programs. References for these programs are provided below:
+
+### SAMtools & BCFtools
+Danecek, P., Bonfield, J. K., Liddle, J., Marshall, J., Ohan, V., Pollard, M. O., Whitwham, A., Keane, T., McCarthy, S. A., Davies, R. M., & Li, H. (2021). Twelve years of SAMtools and BCFtools. _GigaScience_, **10**(2), giab008. https://doi.org/10.1093/gigascience/giab008
+
+Li, H. (2011). A statistical framework for SNP calling, mutation discovery, association mapping and population genetical parameter estimation from sequencing data. _Bioinformatics_, **27**(21), 2987–2993. https://doi.org/10.1093/bioinformatics/btr509
+
+Li, H. (2011). Improving SNP discovery by base alignment quality. _Bioinformatics_, **27**(8), 1157–1158. https://doi.org/10.1093/bioinformatics/btr076
+
+### VCFtools
+Danecek, P., Auton, A., Abecasis, G., Albers, C.A., Banks, E., DePristo, M.A., Handsaker, R.R, Lunter, G., Marth, G.T., Sherry, S.T., McVean, G., Durbin, R., & 1000 Genomes Project Analysis Group (2011). The variant call format and VCFtools. _Bioinformatics_, **27**(15), 2156–2158. https://doi.org/10.1093/bioinformatics/btr330
+
+### BWA
+Li H. (2013) Aligning sequence reads, clone sequences and assembly contigs with BWA-MEM. _arXiv_:1303.3997v1 [q-bio.GN]. https://doi.org/10.48550/arXiv.1303.3997
+
+### Fastp
+Chen, S. (2023). Ultrafast one‐pass FASTQ data preprocessing, quality control, and deduplication using fastp. _iMeta_, **2**(2), e107. https://doi.org/10.1002/imt2.107
+
+### Bowtie2
+Langmead, B., & Salzberg, S. L. (2012). Fast gapped-read alignment with Bowtie 2. _Nature Methods_, **9**(4), 357–359. https://doi.org/10.1038/nmeth.1923
+
+### Seqkit
+Shen, W., Botond S., & Liuyang Z. (2024). SeqKit2: A Swiss Army Knife for Sequence and Alignment Processing. _iMeta_, **3**, e191. https://doi.org/10.1002/imt2.191
+
+### HTSlib
+Bonfield, J.K., Marshall, J., Danecek, P., Li, H., Ohan, V., Whitwham, A., Keane, T., & Davies, R.M. (2021). HTSlib: C library for reading/writing high-throughput sequencing data. _GigaScience_, **10**(2), giab007. https://doi.org/10.1093/gigascience/giab007
+
+### R
+R Core Team (2025). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria. https://www.R-project.org/
 
 # Contacts
 
