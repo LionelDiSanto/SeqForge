@@ -32,7 +32,7 @@ In summary, **SeqForge** provides a unified and systematic framework to take raw
 # _**Genopipe**_: Descrption and Usage Details
 
 ## Overview of _**Genopipe**_
-**Genopipe** is a bash-based module of SeqForge for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
+_**Genopipe**_ is a bash-based module of SeqForge for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
 
 ## Key Features
 * **Illumina Read Compatibility**: Specifically designed to process paired-end (PE) read files generated using Illumina technologies that adhere to the CASAVA 1.8+ FASTQ header format.
@@ -46,36 +46,36 @@ In summary, **SeqForge** provides a unified and systematic framework to take raw
 ## What does _**Genopipe**_ Do?
 
 ### Sorting and Synchronization of Paired-end Read Files using _Seqkit_
-**Genopipe** sorts and then synchronizes paired-end (PE) read files to ensure that both forward and reverse reads remain properly matched before downstream processing using the program _seqkit_. First, each FASTQ file is organized by full read name, producing a sorted output that standardizes read order across files. Then, forward and reverse read files are cross-referenced to retain only properly paired reads and discard unpaired or mismatched entries. Since sorting and synchronization can take considerable time, **genopipe** first verifies whether each pair of read files is already sorted and synchronized. _Seqkit_ is then invoked only for those pairs requiring processing.
+_**Genopipe**_ sorts and then synchronizes paired-end (PE) read files to ensure that both forward and reverse reads remain properly matched before downstream processing using the program _seqkit_. First, each FASTQ file is organized by full read name, producing a sorted output that standardizes read order across files. Then, forward and reverse read files are cross-referenced to retain only properly paired reads and discard unpaired or mismatched entries. Since sorting and synchronization can take considerable time, _**genopipe**_ first verifies whether each pair of read files is already sorted and synchronized. _Seqkit_ is then invoked only for those pairs requiring processing.
 
 ### Read Filtering using _Fastp_
-**Genopipe** includes essential read filtering functions. If your workflow requires more advanced filtering, you can perform it externally and then resume analysis in genopipe with the versatile `<mode>` parameter.
+_**Genopipe**_ includes essential read filtering functions. If your workflow requires more advanced filtering, you can perform it externally and then resume analysis in genopipe with the versatile `<mode>` parameter.
 
-Using the program _fastp_, **genopipe** performs sliding-window trimming of low-quality bases at the 5′ and 3′ ends of reads (average Phred score < 15 within a 5-bp window), automatically detects and removes Illumina paired-end adapter sequences, and discards reads in which more than 50% of bases have a Phred quality score < 15. Reads shorter than 15 bp or containing more than 5 ambiguous bases (N) after trimming are also removed (default parameters in _fastp_). **Genopipe** also implements _fastp_ read mismatch correction where mismatches are resolved in favor of the higher-quality base when overlapping paired-end reads are detected. Note that **genopipe** (using _fastp_) automatically trims polyG tails from reads when processing NovaSeq/NextSeq data. This filter may be forced to other type of data by specifying the option `--trim-polyG` in **genopipe**.
+Using the program _fastp_, _**genopipe**_ performs sliding-window trimming of low-quality bases at the 5′ and 3′ ends of reads (average Phred score < 15 within a 5-bp window), automatically detects and removes Illumina paired-end adapter sequences, and discards reads in which more than 50% of bases have a Phred quality score < 15. Reads shorter than 15 bp or containing more than 5 ambiguous bases (N) after trimming are also removed (default parameters in _fastp_). _**Genopipe**_ also implements _fastp_ read mismatch correction where mismatches are resolved in favor of the higher-quality base when overlapping paired-end reads are detected. Note that _**genopipe**_ (using _fastp_) automatically trims polyG tails from reads when processing NovaSeq/NextSeq data. This filter may be forced to other type of data by specifying the option `--trim-polyG` in _**genopipe**_.
 
 ### Read Mapping onto a Reference Genome
-Mapping of sorted, synchronized, and filtered reads onto a reference genome can be performed two ways in **genopipe**. By default, the Burrows-Wheeler Alignment Tool (_BWA_) is used. When the option `--bowtie2` is specified, **genopipe** switches to _Bowtie2_ (see below for details). Note that for both programs, **genopipe** automatically extract read group metadata from FATSQ files, including unique read group identifier, sample name, sequencing platform, and platform unit, and embedded these metadata into resulting BAM files, ensuring proper traceability in subsequent analyses.
+Mapping of sorted, synchronized, and filtered reads onto a reference genome can be performed two ways in _**genopipe**_. By default, the Burrows-Wheeler Alignment Tool (_BWA_) is used. When the option `--bowtie2` is specified, _**genopipe**_ switches to _Bowtie2_ (see below for details). Note that for both programs, _**genopipe**_ automatically extract read group metadata from FATSQ files, including unique read group identifier, sample name, sequencing platform, and platform unit, and embedded these metadata into resulting BAM files, ensuring proper traceability in subsequent analyses.
 
 #### _BWA mem_
-The alignment of reads to a reference genome using _bwa mem_ is performed with the program's default parameters, excpet for four options that are used-defined in **genopipe**: (1) the number of threads (`--threads`), (2) the matching score (`--match`), (3) the mismatch penalty (`--mismatch`), and (4) the gap-open penalty (`--gapopen`). For additional details on _bwa mem_, see https://bio-bwa.sourceforge.net/bwa.shtml
+The alignment of reads to a reference genome using _bwa mem_ is performed with the program's default parameters, excpet for four options that are used-defined in _**genopipe**_: (1) the number of threads (`--threads`), (2) the matching score (`--match`), (3) the mismatch penalty (`--mismatch`), and (4) the gap-open penalty (`--gapopen`). For additional details on _bwa mem_, see https://bio-bwa.sourceforge.net/bwa.shtml
 
 #### _Bowtie2_
 The alignment of reads to a reference genome using _bowtie2_ is performed in **end-to-end** mode with the **very-sensitive** preset. Strict pairing constraints (`--fr`, `--no-mixed`, `--no-contain`) ensure that only correctly oriented, properly paired reads are retained. All reads are mapped to the reference genome solely using the mutliseed heuristic approach (`--no-1mm-upfront`). For memory efficiency, unaligned reads are not included in the output BAM files (`--no-unal`). Except for the few options presented below, all other options and parameters in _Bowtie2_ are kept to default.
 
-While the parameters above are fixed when using the `--bowtie2` approach in **genopipe**, four options can be defined by the user: (1) the number of threads (`--threads`), (2) the maximum mismatch penalty (`--mismatch`), (3) the gap-open penalty (`--gapopen`), and (4) whether discordant alignments should be included in output BAM files (`--discordant`). Note that, in addition to the maxmimum mismatch and gap-open penalties, other scores including minimum mismatch and gap-extend penalties can be specified in _Bowtie2_. **Genopipe** automatically calculates these additional penalty scores according to those provided with options `--mismatch` and `--gapopen` so that they remain proportionally equivalent to default values set in _Bowtie2_. Finally, **genopipe** only retains concordant alignments by default (unless `--discordant` is specified). One thing important to keep in mind is that read pairs may align concordantly to the reference genome one or multiple times. If read pairs only mapping  _**EXACTLY**_ one time to the reference genome would like to be retained,  the options `--1m-concordant` must be passed to **genopipe**, triggering the exclusion of all concordant alignments originating from identical read pairs using _SAMtools_. When `--1m-concordant` is passed to **genopipe**, one additional option may be specified (`--min-mapQual`) to retain only unique concordant alignments with a mapping quality equal or greater than the value provided. Note, however, that options `--discordant` and `--1m-concordant` are _**MUTUALLY EXCLUSIVE**_. For additional details on _Bowtie2_, see https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#multiseed-heuristic
+While the parameters above are fixed when using the `--bowtie2` approach in _**genopipe**_, four options can be defined by the user: (1) the number of threads (`--threads`), (2) the maximum mismatch penalty (`--mismatch`), (3) the gap-open penalty (`--gapopen`), and (4) whether discordant alignments should be included in output BAM files (`--discordant`). Note that, in addition to the maxmimum mismatch and gap-open penalties, other scores including minimum mismatch and gap-extend penalties can be specified in _Bowtie2_. _**Genopipe**_ automatically calculates these additional penalty scores according to those provided with options `--mismatch` and `--gapopen` so that they remain proportionally equivalent to default values set in _Bowtie2_. Finally, _**genopipe**_ only retains concordant alignments by default (unless `--discordant` is specified). One thing important to keep in mind is that read pairs may align concordantly to the reference genome one or multiple times. If read pairs only mapping  _**EXACTLY**_ one time to the reference genome would like to be retained,  the options `--1m-concordant` must be passed to _**genopipe**_, triggering the exclusion of all concordant alignments originating from identical read pairs using _SAMtools_. When `--1m-concordant` is passed to _**genopipe**_, one additional option may be specified (`--min-mapQual`) to retain only unique concordant alignments with a mapping quality equal or greater than the value provided. Note, however, that options `--discordant` and `--1m-concordant` are _**MUTUALLY EXCLUSIVE**_. For additional details on _Bowtie2_, see https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#multiseed-heuristic
 
 ### Removal of PCR Duplicates with _SAMtools_
-By default, **genopipe** uses _SAMtools_ to sort BAM files by genomic coordinates and then removes PCR duplicates from position-sorted alignement files, ensuring each output file contains only non-duplicate reads prior to genetic variant calling. Specific parameters passed to _SAMtools_ include `-c` and `-r` to clean any previous duplicate settings and flags, and to not only mark but also remove PCR duplicates from BAM files. All other parameters are kept to default.
+By default, _**genopipe**_ uses _SAMtools_ to sort BAM files by genomic coordinates and then removes PCR duplicates from position-sorted alignement files, ensuring each output file contains only non-duplicate reads prior to genetic variant calling. Specific parameters passed to _SAMtools_ include `-c` and `-r` to clean any previous duplicate settings and flags, and to not only mark but also remove PCR duplicates from BAM files. All other parameters are kept to default.
 
-This step can be disabled in **genopipe** with the option `--no-dedup`.
+This step can be disabled in _**genopipe**_ with the option `--no-dedup`.
                     
 ### Calling of Genetic Variants with _BCFtools_
-First, **genopipe** uses _BCFtools_ to generate a coverage profile with _mpileup_, selecting the Illumina-specific configuration profile (`--config illumina`) and forcing the calculation of the **B**ase **A**lignment **Q**uality (**BAQ**) for all reads and not just those in issue-prone regions (`--full-BAQ`). By default, the maximum number of reads considered per site to produce the coverage profile is limited to 250, although this limit can be adjusted in **genopipe** with the option `--depth`. Then Single-nucleotide (SNPs) and Insertion/Deletion (Indels) polymorphisms are called using the _call_ subcommand assuming the multiallelic and rare-variant calling model (`--multiallelic-caller`) without any _a priori_ expectations on the substitution rate (`--prior 0`). Samples are by default assumed to be diploid but this can be adjusted in **genopipe** using the option `--ploidy`. Finally, **genopipe** will by default report only variant sites in the output VCF file. If invariant sites, in addition to variant sites, wish to be inclued in the output VCF file, the option `--invariant` must be specified. Note, however, that reporting invariant sites may result in an _**EXTREMELY**_ large VCF file. Finally, both coverage profile generation and genetic variant calling are performed across samples (and not per sample). **Genopipe** automatically assesses grouping information (i.e., Population ID - see [Input Files](#input-files)) to enable accurate genotype assignment across multiple samples.
+First, _**genopipe**_ uses _BCFtools_ to generate a coverage profile with _mpileup_, selecting the Illumina-specific configuration profile (`--config illumina`) and forcing the calculation of the **B**ase **A**lignment **Q**uality (**BAQ**) for all reads and not just those in issue-prone regions (`--full-BAQ`). By default, the maximum number of reads considered per site to produce the coverage profile is limited to 250, although this limit can be adjusted in _**genopipe**_ with the option `--depth`. Then Single-nucleotide (SNPs) and Insertion/Deletion (Indels) polymorphisms are called using the _call_ subcommand assuming the multiallelic and rare-variant calling model (`--multiallelic-caller`) without any _a priori_ expectations on the substitution rate (`--prior 0`). Samples are by default assumed to be diploid but this can be adjusted in _**genopipe**_ using the option `--ploidy`. Finally, _**genopipe**_ will by default report only variant sites in the output VCF file. If invariant sites, in addition to variant sites, wish to be inclued in the output VCF file, the option `--invariant` must be specified. Note, however, that reporting invariant sites may result in an _**EXTREMELY**_ large VCF file. Finally, both coverage profile generation and genetic variant calling are performed across samples (and not per sample). _**Genopipe**_ automatically assesses grouping information (i.e., Population ID - see [Input Files](#input-files)) to enable accurate genotype assignment across multiple samples.
 
 ## Getting Started
 
 ### Pre-requisites
-Before running **genopipe**, ensure you have the following software accessible in your system's `$PATH`:
+Before running _**genopipe**_, ensure you have the following software accessible in your system's `$PATH`:
 * SAMtools (https://www.htslib.org/download/)
 * BCFtools (https://www.htslib.org/download/)
 * BWA (https://sourceforge.net/projects/bio-bwa/)
@@ -88,7 +88,7 @@ Before running **genopipe**, ensure you have the following software accessible i
 ## Usage
 
 ### Input Files
-To run, **genopipe** requires the creation of a working directory containing a minimum of three files:
+To run, _**genopipe**_ requires the creation of a working directory containing a minimum of three files:
 1. _Reference genome_: A single FASTA file.
 2. _Paired-end reads_: **GZIPPED** FASTQ files, two per sample (see below). 
 
@@ -107,12 +107,12 @@ In this example, the working director "genopipe/my_working_dir/" must contain:
 - The reference genome of Arabidopsis thaliana: Arabidopsis_thaliana.fa
 - At least two FATSQ files: e.g., Pop1_Samp1.F.fq.gz and Pop1_Samp1.R.fq.gz
 ```
-There are only three required parameters for **genopipe** to run:
+There are only three required parameters for _**genopipe**_ to run:
 1. `<reference_genome>`: The name of the reference genome to map reads onto (_**ONLY**_ the file name - not the path to the reference genome - with its extension (e.g., .fa)).
 2. `<working_directory>`: The full path to the working directory containing the reference genome and compressed paired-end read files (two per sample).
-3. `<mode>`: Which mode of **genopipe** to run (see below).
+3. `<mode>`: Which mode of _**genopipe**_ to run (see below).
 
-**Genopipe** can perform read filtering, read mapping, and SNP calling either independently or combined. This feature is determined by the `<mode>`.
+_**Genopipe**_ can perform read filtering, read mapping, and SNP calling either independently or combined. This feature is determined by the `<mode>`.
 Six different modes exist:
 1. `all` - filtering, mapping, and SNPcalling will all be performed sequentially.
 2. `filtering` - Only filtering of raw reads will be performed.
@@ -121,10 +121,10 @@ Six different modes exist:
 5. `filtering_mapping` - Both filtering of raw reads and mapping of filtered reads to the reference genome will be performed.
 6. `mapping_SNPcalling` - Both mapping of filtered reads to the reference genome and calling of genetic variants will be performed.
 
-Importantly, note that **genopipe** will automatically sort and synchronize PE sequences from read 1 and read 2 files (if not already done with a previous run) before starting read filtering or read mapping. The only instance where sorting and synchronization of reads is not performed is when the module is used solely for SNP calling (when input data is in sorted BAM format). Additionally, **genopipe** will automatically remove PCR duplicates from alignment files unless the option `--no-dedup` is specified (see below). 
+Importantly, note that _**genopipe**_ will automatically sort and synchronize PE sequences from read 1 and read 2 files (if not already done with a previous run) before starting read filtering or read mapping. The only instance where sorting and synchronization of reads is not performed is when the module is used solely for SNP calling (when input data is in sorted BAM format). Additionally, _**genopipe**_ will automatically remove PCR duplicates from alignment files unless the option `--no-dedup` is specified (see below). 
 
 #### All Available Options in Genopipe
-In addition to the three required parameters, several options may be specified and passed to **genopipe** to custumize each run:
+In addition to the three required parameters, several options may be specified and passed to _**genopipe**_ to custumize each run:
 ```
 Options to be passed to the module:
     -h, --help                          Show this help page.
@@ -171,6 +171,108 @@ The module generates several intermediate and final repositories and files in th
 | Calling of genetic variants (SNPs and Indels) | A compressed (gzipped) VCF file containing raw genetic variants called: `RawSNPs.vcf.gz` |
 
 # _**VCFpipe**_: Description and Usage Details
+
+## Overview
+_**VCFpipe**_ is a bash-based module of SeqForge designed for comprehensive filtering of VCF (Variant Call Format) files containing genetic variant (SNPs and indels) and invariant sites. It provides a unified framework to apply multiple layers of site and genotype filtering, as well as the detection of potential paralogous sites.
+
+## Key Features
+* **Multi-stage VCF filtering** (quality, depth, MAF, LD, etc.).
+* **Automated paralog detection** using heterozygosity and read ratio deviation.
+* **Customizable thresholds** for all filtering parameters.
+
+## Getting Started
+
+### Pre-requisites
+Before running _**vcfpipe**_, ensure the following software are accessible from your system's `$PATH`:
+* VCFtools (https://vcftools.sourceforge.net/)
+* BCFtools (https://www.htslib.org/download/)
+* HTSlib (https://www.htslib.org/download/)
+* R (https://cran.r-project.org/)
+
+Additionally, **R** packages `vcfR`, `ggplot2`, `dpyr`, and `stringr` must be installed to use the option `--paralogs`.
+
+## Usage
+
+### Input Files
+To run, _**vcfpipe**_ requires the creation of a working directory containing a single VCF file. This file can be uncompressed or gzip-compressed and can contain only variant sites or both invariant and variant sites. If a VCF file containing both variant and invariant sites is provided as input, _**vcfpipe**_ will automatically detect it and run all filters on minor alleles (`--min-mac`, `--maf`,  and `--paralogs`) solely on variant sites. Note that output files change depending on whether the input VCF file contains only variant or both variant and invariant sites (see [Output Files](#output-files)).
+
+### Running the pipeline
+The pipeline is executed via a single ommand passing the necessary parameters:
+```
+vcfsentry [options] <file.vcf(.gz)> <working_directory>
+vcfsentry version (to print the version of the software)
+
+Example:
+vcfsentry --maf 0.02 --minQ 30 --max-depth Li2014 --paralogs 1:5 --no-indels --no-multiallelic MyRawData.vcf.gz Vcf-Sentry/my_working_dir
+
+In this example, the working directory "VCF-Sentry/my_working_dir" must contain a single VCF file, "MyRawData.vcf.gz".
+```
+There are only two requirements for _**vcfpipe**_ to run:
+1. `<file.vcf(.gz)>`: The name of the VCF file to be filtered (_**ONLY**_ the file name - not the path to the VCF file - with its extension (e.g., .vcf). This file can be either uncompressed or gzip-compressed.
+2. `<working_directory>`: The full path to the working directory containing the VCF file to be filtered.
+
+#### All Available Options in _**vcfpipe**_
+In addition to the two requied parameters, several options may be specified and passed to _**vcfpipe**_ to custumize each run:
+```
+Options to be passed to the module:
+    -h, --help                          Show this help page.
+    -n, --missing-ind       <float>     This parameter filters the data according to per individual fraction of missing data (range between 0 and 1). All individuals within the provided VCF file
+                                        with a fraction of missing data greater than this value will be removed. Default is 1 (keep all individuals).
+    -q, --minQ              <integer>   Minimum site quality (QUAL). Include only sites with Quality value above this threshold (other sites are removed). Default value is 30.
+    -c, --min-mac           <integer>   Minimum minor allele count (MAC). Include only sites with MAC greater than or equal to this value (other sites are removed). Default value is 3.
+    -g, --minGQ             <integer>   Minimum genotype quality (GQ). Exclude all genotypes with quality below this threshold (GQ FORMAT tag must be specified for all sites).
+                                        Note that excluded genotypes are treated as missing (and not discarded). Default value is 20.
+    -d, --minDP             <integer>   Minimum genotype depth (MinDP). Include only genotypes with depth greater than or equal to this value (DP FORMAT tag must be specified for all sites).
+                                        Note that excluded genotypes are treated as missing (and not discarded). Default value is 5.
+    -a, --maf               <float>     Minor allele frequency (MAF). Include only sites with a MAF greater than or equal to this value (other sites are removed). Allele frequency is defined 
+                                        as the number of times an allele appears over all individuals at that site, divided by the total number of non-missing alleles at that site. Default value is 0.01.
+    -i, --GT-call           <float>     Genotype call rate across all individuals. Exclude sites on the basis of the proportion of missing data (range between 0 and 1, where 0 allows sites
+                                        that are completely missing, and 1 indicates no missing data allowed). Sites not complying with this argument are removed. Note that by default the module 
+                                        will exlude any sites with a proportion of missing data greater than 0.5 before implementing this filter. Consequently, the value provided here should be 
+                                        greater than 0.5 to have any incidence on retained sites. Default value is 0.95.
+    -l, --linkage                       If specified (-l, --linkage), linkage desequilibrium filtering will be implemented and -r (--r2) and -s (--wd-size) must be provided (see below).
+    -r, --r2                <float>     R2 for linkage desequilibrium filtering. This represents the maximum correlation squared allow between two genetic variants. Any genetic variants with 
+                                        a correlation squared above this threshold (within the window specified by -w, --wd-size (see below) will be removed.
+    -s, --wd-size           <integer>   Window size used during linkage desequilibrium filtering (in bp). For more details, see above (-r, --r2).
+    -z, --min-depth         <integer>   Minimum average read depth (over all individuals). Include only sites with a mean read depth over all individual greater than or equal to this value. Default valus is 5.
+    -m, --max-depth         <string>    This argument takes one of the following values: Li2014, mean:x, none, or a numerical value. If 'Li2014' is provided (-m, --max-depth Li2014), then filtering of sites 
+                        or  <integer>   based on maximum read depth following recommendations by Li 2014 is performed; sites with mean depth (over all individuals) > d+4*sqrt(d), where d is the average read 
+                                        depth across variants, are removed. If 'mean:x' is provided (e.g., -m, --max-depth mean:2), where x must be a numerical value, then sites with mean read depth (over all
+                                        individuals) > x times the mean read depth across variants are removed. If 'none' is provided (-m, --max-depth none), no filtering based on site mean depth will be performed.
+                                        If a numerical value is provided (e.g., -m, --max-depth 100), then sites with mean read depth (over all individuals) > than the provided value (e.g., 100) will be removed.
+                                        Default is 'none'.
+    -p, --paralogs          <string>    This argument takes the two following values: none or x:y. If 'x:y' is provided, genetic variants likely stemming from the mapping of paralogous sequences will be identified
+                                        and removed from the VCF file. Identification of paralogs necessitate two parameters, namely x and y. x fixes the upper threshold for the proportion of heterozygotes [H, ranges 
+                                        from >0 to 1]; any sites with heterozygosity above this threshold will be discarded. y fixes the upper limit for the deviation of ratios from the expected 50:50 [D, range from 
+                                        -inf to inf], calcuated as a z-score. In other words, this parameter defines how many standard deviations the observed A:B allele ratio at a given site is allowed to deviate from 
+                                        the expected 50:50 balance. This parameter thus filters sites with strong allelic imbalance. Note that when using this parameter, it is best to use only bi-allelic genetic markers. 
+                                        This option supports multi-allelic genetic markers, but sites with more than two alleles are ignored during heterozygosity and allelic imbalance filtering. If 'none' is provided, 
+                                        no filtering of paralogs will be performed. To use this option, R package vcfR, ggplot2, dplyr, and stringr must be installed. Double-check that the packages are installed for the 
+                                        R version loaded or exported. If an R repository containing vcfR, ggplot2, dplyr, and stringr packages is missing, the module will return an error. Default is 'none'.
+    -t, --threads           <integer>   Set the number of threads to use for analysis [default: 1]. 
+    -b, --no-multiallelic               If specified (-b, --no-multiallelic), this argument triggers the exclusion of multiallelic sites, so only biallelic single-nucleotide polymorphisms and 
+                                        indels are kept.
+    -e, --no-indels                     If specified (-e, --no-indels), this argument triggers the exclusion of indels, so that exclusively single-nucleotide polymorphisms are kept (either biallelic 
+                                        or multiallelic depending on whether -b, --no-multiallelic is specified).
+```
+
+### Output Files
+The pipeline generates several intermediate and final files in the working directory. Key files include:
+| **File** | **Description** |
+|:------------|:-------------|
+| FinalSNPs.vcf.gz | Final filtered VCF (when input VCF contains only variant sites) |
+| FinalSNPs_variant.vcf.gz | Final filtered VCF for variant sites (when input VCF contains both variant and invariant sites) |
+| FinalSNPs_invariant.vcf.gz | Final filtered VCF for invariant sites (when input VCF contains both variant and invariant sites) |
+| Final_SNPs_variant_invariant.vcf.gz | VCF concatenating FinalSNPs_variant.vcf.gz and FinalSNPs_invariant.vcf.gz |
+| Fractions_missing_individuals.pdf | Histogram of the fraction of missing data per individual (when `--missing-ind` is not 1) |
+| Distribution_H_D_Quantiles.pdf | Histograms of H and D with dashed red vertical lines representing 5%, 50%, and 95% quantiles (when `--paralogs` is not `none`)
+| HD_plot.pdf | Scatter plot of H against D, where red points represent inferred paralogs based on provided H and D thresholds (dashed red vertical and horizontal lines) - only produced when `--paralogs` is not `none` |
+| vcftools.log | A log file where all steps involving the use of VCFtools are recorded |
+| bcftools.log | A log file where all steps involving filtering with BCFtools (indexing and sorting steps not included) are recorded (only produced when `--linkage` is provided,  `--paralogs` is not `none`, or both variant and invariant sites are present in the input VCF) |
+| _file_.R (can be more than one) | R scripts generated and used by _**vcfpipe**_ (only when `--missing-ind` is not 1, `--max-depth` is not `none` or an integer, or `--paralogs` is not `none`) |
+| _file_.Rout (can be more than one) | Files recording R console outputs of _file_.R |
+| ind.keep | File listing individuals kept after filtering for individual missingness (only when `--missing-ind` is not 1) |
+| keep_paralogs.txt | File listing variant sites _**NOT**_ identified as paralogs (two columns: 1/ Chromosome ID, 2/ Position of the variant on the chromosome) |
 
 # References
 
