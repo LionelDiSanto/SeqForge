@@ -28,6 +28,20 @@ The pipeline is engineered to handle **raw (demultiplexed) paired-end read files
 In summary, **SeqForge** provides a unified and systematic framework to take raw Illumina data through the essential steps of alignment, quality control, and robust variant filtering, yielding a high-confidence set of SNPs (and Indels).
 
 # Installation
+1. Clone the repository
+```
+git clone https://github.com/LionelDiSanto/GenoPipe.git
+cd GenoPipe
+```
+2. Convert files from DOS line endings to Unix line endings (if needed) and make the script executable
+```
+dos2unix GenoPipe
+chmod +x GenoPipe
+```
+3. Add the program to your path to execute it without the need to provide the (full) path to the script:
+```
+export PATH=/path_to_GenoPipe/GenoPipe/:$PATH
+```
 
 # _**Genopipe**_: Descrption and Usage Details
 
