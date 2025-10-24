@@ -325,4 +325,4 @@ For questions or to report issues, please contact Dr. Lionel Di Santo (lionel.di
 _coming soon_
 
 # Contribution
-**Want to make SeqForge better?** We highly encourage contributions! Whether it's reporting a bug, suggesting a new feature for genopipe or vcfpipe, or submitting code, your efforts are valuable.
+**Want to make SeqForge better?** We highly encourage contributions! Whether it's reporting a bug, suggesting a new feature for _**genopipe**_ or _**vcfpipe**_, or submitting code, your efforts are valuable.
