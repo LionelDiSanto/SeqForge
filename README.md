@@ -37,7 +37,7 @@ cd SeqForge
 ```
 dos2unix * && chmod +x *
 ```
-3. Add the program to your path to execute it without the need to provide the (full) path to the script:
+3. Add the pipeline to your path to execute it without the need to provide the (full) path to the script:
 ```
 export PATH=/path_to_SeqForge/SeqForge/:$PATH
 ```
