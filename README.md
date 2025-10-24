@@ -43,7 +43,7 @@ In summary, **SeqForge** provides a unified and systematic framework to take raw
 * **Comprehensive Variant Calling**: Performs the final genetic analysis, calling both Single Nucleotide Polymorphisms (SNPs) and small Insertions/Deletions (Indels) in the mapped data using _BCFtools_.
 * **End-to-End Automation**: Provides a single, automated module that links all steps — from raw demultiplexed read sorting, synchronization, and filtering to the final VCF file.
 
-## What does Genopipe Do?
+## What does _**Genopipe**_ Do?
 
 ### Sorting and Synchronization of Paired-end Read Files using _Seqkit_
 **Genopipe** sorts and then synchronizes paired-end (PE) read files to ensure that both forward and reverse reads remain properly matched before downstream processing using the program _seqkit_. First, each FASTQ file is organized by full read name, producing a sorted output that standardizes read order across files. Then, forward and reverse read files are cross-referenced to retain only properly paired reads and discard unpaired or mismatched entries. Since sorting and synchronization can take considerable time, **genopipe** first verifies whether each pair of read files is already sorted and synchronized. _Seqkit_ is then invoked only for those pairs requiring processing.
