@@ -7,7 +7,7 @@
   - [Core Function and Structure](#core-function-and-structure)
   - [Module Breakdown](#module-breakdown)
 - [Installation](#installation)
-- [_**Genopipe**_: Descrption and Usage Details](#genopipe:-description-and-usage-details)
+- [_**Genopipe**_: Descrption and Usage Details](#genopipe-descrption-and-usage-details)
   - [Overview of _**Genopipe**_](#overview-of-genopipe)
   - [Key Features](#key-features) 
   - [What does **Genopipe** Do?](#what-does-genopipe-do)
@@ -26,7 +26,7 @@
     - [Running the Pipeline](#running-the-pipeline)
       - [All Available Options in **GenoPipe**](#all-available-options-in-genopipe)
     - [Output Files](#output-files)
-- [_**VCFpipe**_: Description and Usage Details](#vcfpipe:-description-and-usage-details)
+- [_**VCFpipe**_: Description and Usage Details](#vcfpipe-description-and-usage-details)
 - [References](#references)
 - [Contacts](#contacts)
 - [How to cite **SeqForge**?](#how-to-cite-seqforge)
@@ -52,7 +52,7 @@ In summary, **SeqForge** provides a unified and systematic framework to take raw
 ## Overview of _**Genopipe**_
 **GenoPipe** is a bash-based pipeline for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
 
-# Key Features
+## Key Features
 * **Illumina Read Compatibility**: Specifically designed to process paired-end (PE) read files generated using Illumina technologies that adhere to the CASAVA 1.8+ FASTQ header format.
 * **Integrated Read Sorting and Synchronization**: Sorts and synchronizes raw paired-end (PE) read files using _seqkit_ to ensure mates pairs are correctly matched.
 * **Integrated Quality Filtering**: Applies basic filters to raw reads using _Fastp_ to ensure only high-quality data proceeds to mapping.
