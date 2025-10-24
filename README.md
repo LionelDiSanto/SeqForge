@@ -8,24 +8,6 @@
   - [Module Breakdown](#module-breakdown)
 - [Installation](#installation)
 - [_**Genopipe**_: Descrption and Usage Details](#genopipe-descrption-and-usage-details)
-  - [Overview of _**Genopipe**_](#overview-of-genopipe)
-  - [Key Features](#key-features) 
-  - [What does **Genopipe** Do?](#what-does-genopipe-do)
-    - [Sorting and Synchronization of Paired-end Read Files using _Seqkit_](#sorting-and-synchronization-of-paired-end-read-files-using-seqkit)
-    - [Read Filtering using _Fastp_](#read-filtering-using-fastp)
-    - [Read Mapping onto a Reference Genome](#read-mapping-onto-a-reference-genome)
-      - [_BWA mem_](#bwa-mem)
-      - [_Bowtie2_](#bowtie2)
-    - [Removal of PCR Duplicates with _SAMtools_](#removal-of-pcr-duplicates-with-samtools)
-    - [Calling of Genetic Variants with _BCFtools_](#calling-of-genetic-variants-with-bcftools)
-  - [Getting Started](#getting-started)
-    - [Pre-requisites](#pre-requisites)
-    - [Installation](#installation)
-  - [Usage](#usage)
-    - [Input Files](#input-files)
-    - [Running the Pipeline](#running-the-pipeline)
-      - [All Available Options in **GenoPipe**](#all-available-options-in-genopipe)
-    - [Output Files](#output-files)
 - [_**VCFpipe**_: Description and Usage Details](#vcfpipe-description-and-usage-details)
 - [References](#references)
 - [Contacts](#contacts)
@@ -50,7 +32,7 @@ In summary, **SeqForge** provides a unified and systematic framework to take raw
 # _**Genopipe**_: Descrption and Usage Details
 
 ## Overview of _**Genopipe**_
-**GenoPipe** is a bash-based pipeline for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
+**Genopipe** is a bash-based pipeline for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
 
 ## Key Features
 * **Illumina Read Compatibility**: Specifically designed to process paired-end (PE) read files generated using Illumina technologies that adhere to the CASAVA 1.8+ FASTQ header format.
@@ -61,39 +43,39 @@ In summary, **SeqForge** provides a unified and systematic framework to take raw
 * **Comprehensive Variant Calling**: Performs the final genetic analysis, calling both Single Nucleotide Polymorphisms (SNPs) and small Insertions/Deletions (Indels) in the mapped data using _BCFtools_.
 * **End-to-End Automation**: Provides a single, automated pipeline that links all steps — from raw demultiplexed read sorting, synchronization, and filtering to the final VCF file.
 
-## What does GenoPipe Do?
+## What does Genopipe Do?
 
 ### Sorting and Synchronization of Paired-end Read Files using _Seqkit_
-**GenoPipe** sorts and then synchronizes paired-end (PE) read files to ensure that both forward and reverse reads remain properly matched before downstream processing using the program _seqkit_. First, each FASTQ file is organized by full read name, producing a sorted output that standardizes read order across files. Then, forward and reverse read files are cross-referenced to retain only properly paired reads and discard unpaired or mismatched entries. Since sorting and synchronization can take considerable time, **GenoPipe** first verifies whether each pair of read files is already sorted and synchronized. _Seqkit_ is then invoked only for those pairs requiring processing.
+**Genopipe** sorts and then synchronizes paired-end (PE) read files to ensure that both forward and reverse reads remain properly matched before downstream processing using the program _seqkit_. First, each FASTQ file is organized by full read name, producing a sorted output that standardizes read order across files. Then, forward and reverse read files are cross-referenced to retain only properly paired reads and discard unpaired or mismatched entries. Since sorting and synchronization can take considerable time, **genopipe** first verifies whether each pair of read files is already sorted and synchronized. _Seqkit_ is then invoked only for those pairs requiring processing.
 
 ### Read Filtering using _Fastp_
-**GenoPipe** includes essential read filtering functions. If your workflow requires more advanced filtering, you can perform it externally and then resume analysis in GenoPipe with the versatile `<mode>` parameter.
+**Genopipe** includes essential read filtering functions. If your workflow requires more advanced filtering, you can perform it externally and then resume analysis in genopipe with the versatile `<mode>` parameter.
 
-Using the program _fastp_, **GenoPipe** performs sliding-window trimming of low-quality bases at the 5′ and 3′ ends of reads (average Phred score < 15 within a 5-bp window), automatically detects and removes Illumina paired-end adapter sequences, and discards reads in which more than 50% of bases have a Phred quality score < 15. Reads shorter than 15 bp or containing more than 5 ambiguous bases (N) after trimming are also removed (default parameters in _fastp_). **GenoPipe** also implements _fastp_ read mismatch correction where mismatches are resolved in favor of the higher-quality base when overlapping paired-end reads are detected. Note that **GenoPipe** (using _fastp_) automatically trims polyG tails from reads when processing NovaSeq/NextSeq data. This filter may be forced to other type of data by specifying the option `--trim-polyG` in **GenoPipe**.
+Using the program _fastp_, **genopipe** performs sliding-window trimming of low-quality bases at the 5′ and 3′ ends of reads (average Phred score < 15 within a 5-bp window), automatically detects and removes Illumina paired-end adapter sequences, and discards reads in which more than 50% of bases have a Phred quality score < 15. Reads shorter than 15 bp or containing more than 5 ambiguous bases (N) after trimming are also removed (default parameters in _fastp_). **Genopipe** also implements _fastp_ read mismatch correction where mismatches are resolved in favor of the higher-quality base when overlapping paired-end reads are detected. Note that **genopipe** (using _fastp_) automatically trims polyG tails from reads when processing NovaSeq/NextSeq data. This filter may be forced to other type of data by specifying the option `--trim-polyG` in **genopipe**.
 
 ### Read Mapping onto a Reference Genome
-Mapping of sorted, synchronized, and filtered reads onto a reference genome can be performed two ways in **GenoPipe**. By default, the Burrows-Wheeler Alignment Tool (_BWA_) is used. When the option `--bowtie2` is specified, **GenoPipe** switches to _Bowtie2_ (see below for details). Note that for both programs, **GenoPipe** automatically extract read group metadata from FATSQ files, including unique read group identifier, sample name, sequencing platform, and platform unit, and embedded these metadata into resulting BAM files, ensuring proper traceability in subsequent analyses.
+Mapping of sorted, synchronized, and filtered reads onto a reference genome can be performed two ways in **genopipe**. By default, the Burrows-Wheeler Alignment Tool (_BWA_) is used. When the option `--bowtie2` is specified, **genopipe** switches to _Bowtie2_ (see below for details). Note that for both programs, **genopipe** automatically extract read group metadata from FATSQ files, including unique read group identifier, sample name, sequencing platform, and platform unit, and embedded these metadata into resulting BAM files, ensuring proper traceability in subsequent analyses.
 
 #### _BWA mem_
-The alignment of reads to a reference genome using _bwa mem_ is performed with the program's default parameters, excpet for four options that are used-defined in **GenoPipe**: (1) the number of threads (`--threads`), (2) the matching score (`--match`), (3) the mismatch penalty (`--mismatch`), and (4) the gap-open penalty (`--gapopen`). For additional details on _bwa mem_, see https://bio-bwa.sourceforge.net/bwa.shtml
+The alignment of reads to a reference genome using _bwa mem_ is performed with the program's default parameters, excpet for four options that are used-defined in **genopipe**: (1) the number of threads (`--threads`), (2) the matching score (`--match`), (3) the mismatch penalty (`--mismatch`), and (4) the gap-open penalty (`--gapopen`). For additional details on _bwa mem_, see https://bio-bwa.sourceforge.net/bwa.shtml
 
 #### _Bowtie2_
 The alignment of reads to a reference genome using _bowtie2_ is performed in **end-to-end** mode with the **very-sensitive** preset. Strict pairing constraints (`--fr`, `--no-mixed`, `--no-contain`) ensure that only correctly oriented, properly paired reads are retained. All reads are mapped to the reference genome solely using the mutliseed heuristic approach (`--no-1mm-upfront`). For memory efficiency, unaligned reads are not included in the output BAM files (`--no-unal`). Except for the few options presented below, all other options and parameters in _Bowtie2_ are kept to default.
 
-While the parameters above are fixed when using the `--bowtie2` approach in **GenoPipe**, four options can be defined by the user: (1) the number of threads (`--threads`), (2) the maximum mismatch penalty (`--mismatch`), (3) the gap-open penalty (`--gapopen`), and (4) whether discordant alignments should be included in output BAM files (`--discordant`). Note that, in addition to the maxmimum mismatch and gap-open penalties, other scores including minimum mismatch and gap-extend penalties can be specified in _Bowtie2_. **GenoPipe** automatically calculates these additional penalty scores according to those provided with options `--mismatch` and `--gapopen` so that they remain proportionally equivalent to default values set in _Bowtie2_. Finally, **GenoPipe** only retains concordant alignments by default (unless `--discordant` is specified). One thing important to keep in mind is that read pairs may align concordantly to the reference genome one or multiple times. If read pairs only mapping  _**EXACTLY**_ one time to the reference genome would like to be retained,  the options `--1m-concordant` must be passed to **GenoPipe**, triggering the exclusion of all concordant alignments originating from identical read pairs using _SAMtools_. When `--1m-concordant` is passed to **GenoPipe**, one additional option may be specified (`--min-mapQual`) to retain only unique concordant alignments with a mapping quality equal or greater than the value provided. Note, however, that options `--discordant` and `--1m-concordant` are _**MUTUALLY EXCLUSIVE**_. For additional details on _Bowtie2_, see https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#multiseed-heuristic
+While the parameters above are fixed when using the `--bowtie2` approach in **genopipe**, four options can be defined by the user: (1) the number of threads (`--threads`), (2) the maximum mismatch penalty (`--mismatch`), (3) the gap-open penalty (`--gapopen`), and (4) whether discordant alignments should be included in output BAM files (`--discordant`). Note that, in addition to the maxmimum mismatch and gap-open penalties, other scores including minimum mismatch and gap-extend penalties can be specified in _Bowtie2_. **Genopipe** automatically calculates these additional penalty scores according to those provided with options `--mismatch` and `--gapopen` so that they remain proportionally equivalent to default values set in _Bowtie2_. Finally, **genopipe** only retains concordant alignments by default (unless `--discordant` is specified). One thing important to keep in mind is that read pairs may align concordantly to the reference genome one or multiple times. If read pairs only mapping  _**EXACTLY**_ one time to the reference genome would like to be retained,  the options `--1m-concordant` must be passed to **genopipe**, triggering the exclusion of all concordant alignments originating from identical read pairs using _SAMtools_. When `--1m-concordant` is passed to **genopipe**, one additional option may be specified (`--min-mapQual`) to retain only unique concordant alignments with a mapping quality equal or greater than the value provided. Note, however, that options `--discordant` and `--1m-concordant` are _**MUTUALLY EXCLUSIVE**_. For additional details on _Bowtie2_, see https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#multiseed-heuristic
 
 ### Removal of PCR Duplicates with _SAMtools_
-By default, **GenoPipe** uses _SAMtools_ to sort BAM files by genomic coordinates and then removes PCR duplicates from position-sorted alignement files, ensuring each output file contains only non-duplicate reads prior to genetic variant calling. Specific parameters passed to _SAMtools_ include `-c` and `-r` to clean any previous duplicate settings and flags, and to not only mark but also remove PCR duplicates from BAM files. All other parameters are kept to default.
+By default, **genopipe** uses _SAMtools_ to sort BAM files by genomic coordinates and then removes PCR duplicates from position-sorted alignement files, ensuring each output file contains only non-duplicate reads prior to genetic variant calling. Specific parameters passed to _SAMtools_ include `-c` and `-r` to clean any previous duplicate settings and flags, and to not only mark but also remove PCR duplicates from BAM files. All other parameters are kept to default.
 
-This step can be disabled in **GenoPipe** with the option `--no-dedup`.
+This step can be disabled in **genopipe** with the option `--no-dedup`.
                     
 ### Calling of Genetic Variants with _BCFtools_
-First, **GenoPipe** uses _BCFtools_ to generate a coverage profile with _mpileup_, selecting the Illumina-specific configuration profile (`--config illumina`) and forcing the calculation of the **B**ase **A**lignment **Q**uality (**BAQ**) for all reads and not just those in issue-prone regions (`--full-BAQ`). By default, the maximum number of reads considered per site to produce the coverage profile is limited to 250, although this limit can be adjusted in **GenoPipe** with the option `--depth`. Then Single-nucleotide (SNPs) and Insertion/Deletion (Indels) polymorphisms are called using the _call_ subcommand assuming the multiallelic and rare-variant calling model (`--multiallelic-caller`) without any _a priori_ expectations on the substitution rate (`--prior 0`). Samples are by default assumed to be diploid but this can be adjusted in **GenoPipe** using the option `--ploidy`. Finally, **GenoPipe** will by default report only variant sites in the output VCF file. If invariant sites, in addition to variant sites, wish to be inclued in the output VCF file, the option `--invariant` must be specified. Note, however, that reporting invariant sites may result in an _**EXTREMELY**_ large VCF file. Finally, both coverage profile generation and genetic variant calling are performed across samples (and not per sample). **GenoPipe** automatically assesses grouping information (i.e., Population ID - see [Input Files](#input-files)) to enable accurate genotype assignment across multiple samples.
+First, **genopipe** uses _BCFtools_ to generate a coverage profile with _mpileup_, selecting the Illumina-specific configuration profile (`--config illumina`) and forcing the calculation of the **B**ase **A**lignment **Q**uality (**BAQ**) for all reads and not just those in issue-prone regions (`--full-BAQ`). By default, the maximum number of reads considered per site to produce the coverage profile is limited to 250, although this limit can be adjusted in **genopipe** with the option `--depth`. Then Single-nucleotide (SNPs) and Insertion/Deletion (Indels) polymorphisms are called using the _call_ subcommand assuming the multiallelic and rare-variant calling model (`--multiallelic-caller`) without any _a priori_ expectations on the substitution rate (`--prior 0`). Samples are by default assumed to be diploid but this can be adjusted in **genopipe** using the option `--ploidy`. Finally, **genopipe** will by default report only variant sites in the output VCF file. If invariant sites, in addition to variant sites, wish to be inclued in the output VCF file, the option `--invariant` must be specified. Note, however, that reporting invariant sites may result in an _**EXTREMELY**_ large VCF file. Finally, both coverage profile generation and genetic variant calling are performed across samples (and not per sample). **Genopipe** automatically assesses grouping information (i.e., Population ID - see [Input Files](#input-files)) to enable accurate genotype assignment across multiple samples.
 
 ## Getting Started
 
 ### Pre-requisites
-Before running **GenoPipe**, ensure you have the following software accessible in your system's `$PATH`:
+Before running **genopipe**, ensure you have the following software accessible in your system's `$PATH`:
 * SAMtools (https://www.htslib.org/download/)
 * BCFtools (https://www.htslib.org/download/)
 * BWA (https://sourceforge.net/projects/bio-bwa/)
@@ -103,30 +85,14 @@ Before running **GenoPipe**, ensure you have the following software accessible i
 * HTSlib (https://www.htslib.org/download/)
 * R (https://cran.r-project.org/)
 
-### Installation
-1. Clone the repository
-```
-git clone https://github.com/LionelDiSanto/GenoPipe.git
-cd GenoPipe
-```
-2. Convert files from DOS line endings to Unix line endings (if needed) and make the script executable
-```
-dos2unix GenoPipe
-chmod +x GenoPipe
-```
-3. Add the program to your path to execute it without the need to provide the (full) path to the script:
-```
-export PATH=/path_to_GenoPipe/GenoPipe/:$PATH
-```
-
 ## Usage
 
 ### Input Files
-To run, **GenoPipe** requires the creation of a working directory containing a minimum of three files:
+To run, **genopipe** requires the creation of a working directory containing a minimum of three files:
 1. _Reference genome_: A single FASTA file.
 2. _Paired-end reads_: **GZIPPED** FASTQ files, two per sample (see below). 
 
-**IMPORTANT**: The program uses specific patterns in file names to run and hence all sequence files _**MUST MUST MUST**_ follow a specific naming convention! If read files provided are not yet filtered then they must be named as PopulationID_SampleID.F.fq.gz (read 1 - forward) and PopulationID_SampleID.R.fq.gz (read 2 - reverse). If read files provided are already filtered then they must be named PopulationID_SampleID.R1.fq.gz (read 1 - forward) and PopulationID_SampleID.R2.fq.gz (read 2 - reverse). If read files are already aligned (input alignment files must be sorted and in bam format): PopulationID_SampleID.bam.
+**IMPORTANT**: The module uses specific patterns in file names to run and hence all sequence files _**MUST MUST MUST**_ follow a specific naming convention! If read files provided are not yet filtered then they must be named as PopulationID_SampleID.F.fq.gz (read 1 - forward) and PopulationID_SampleID.R.fq.gz (read 2 - reverse). If read files provided are already filtered then they must be named PopulationID_SampleID.R1.fq.gz (read 1 - forward) and PopulationID_SampleID.R2.fq.gz (read 2 - reverse). If read files are already aligned (input alignment files must be sorted and in bam format): PopulationID_SampleID.bam.
 
 ### Running the Pipeline
 The pipeline is executed via a single command passing necessary parameters:
@@ -141,12 +107,12 @@ In this example, the working director "GenoPipe/my_working_dir/" must contain:
 - The reference genome of Arabidopsis thaliana: Arabidopsis_thaliana.fa
 - At least two FATSQ files: e.g., Pop1_Samp1.F.fq.gz and Pop1_Samp1.R.fq.gz
 ```
-There are only three required parameters for **GenoPipe** to run:
+There are only three required parameters for **genopipe** to run:
 1. `<reference_genome>`: The name of the reference genome to map reads onto (_**ONLY**_ the file name - not the path to the reference genome - with its extension (e.g., .fa)).
 2. `<working_directory>`: The full path to the working directory containing the reference genome and compressed paired-end read files (two per sample).
-3. `<mode>`: Which mode of **GenoPipe** to run (see below).
+3. `<mode>`: Which mode of **genopipe** to run (see below).
 
-**GenoPipe** can perform read filtering, read mapping, and SNP calling either independently or combined. This feature is determined by the `<mode>`.
+**Genopipe** can perform read filtering, read mapping, and SNP calling either independently or combined. This feature is determined by the `<mode>`.
 Six different modes exist:
 1. `all` - filtering, mapping, and SNPcalling will all be performed sequentially.
 2. `filtering` - Only filtering of raw reads will be performed.
@@ -155,12 +121,12 @@ Six different modes exist:
 5. `filtering_mapping` - Both filtering of raw reads and mapping of filtered reads to the reference genome will be performed.
 6. `mapping_SNPcalling` - Both mapping of filtered reads to the reference genome and calling of genetic variants will be performed.
 
-Importantly, note that **GenoPipe** will automatically sort and synchronize PE sequences from read 1 and read 2 files (if not already done with a previous run) before starting read filtering or read mapping. The only instance where sorting and synchronization of reads is not performed is when the program is used solely for SNP calling (when input data is in sorted BAM format). Additionally, **GenoPipe** will automatically remove PCR duplicates from alignment files unless the option `--no-dedup` is specified (see below). 
+Importantly, note that **genopipe** will automatically sort and synchronize PE sequences from read 1 and read 2 files (if not already done with a previous run) before starting read filtering or read mapping. The only instance where sorting and synchronization of reads is not performed is when the module is used solely for SNP calling (when input data is in sorted BAM format). Additionally, **genopipe** will automatically remove PCR duplicates from alignment files unless the option `--no-dedup` is specified (see below). 
 
-#### All Available Options in GenoPipe
-In addition to the three required parameters, several options may be specified and passed to **GenoPipe** to custumize each run:
+#### All Available Options in Genopipe
+In addition to the three required parameters, several options may be specified and passed to **genopipe** to custumize each run:
 ```
-Options to be passed to the program:
+Options to be passed to the module:
     -h, --help                          Show this help page.
     -w, --invariant                     When this argument is specified, variant and invariant sites will be kept in the VCF output 
                                         (if not specified, then only variant sites are returned).
@@ -185,7 +151,7 @@ Options to be passed to the program:
     -p, --ploidy            <integer>   Ploidy of samples assumed for analysis [default: 2 (diploid)].
     -d, --depth             <integer>   Number of reads considered per BAM file for SNP calling [default: 250].
     -m, --match             <integer>   Matching score to be passed to aligner [default: 1]. Note that this parameter is needed only when using BWA mem 
-                                        as the read mapping program.
+                                        as the read mapping module.
     -i, --mismatch          <integer>   Mismatch penalty score to be passed to aligner [default: 4].
     -o, --gapopen           <integer>   Gap open penalty score to be passed to aligner [default: 6].
     -q, --min-mapQual       <integer>   If -u, --1m-concordant is specified, then specifying a value > 0 for this argument will implement an additional
