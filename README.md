@@ -172,7 +172,7 @@ The module generates several intermediate and final repositories and files in th
 
 # _**VCFpipe**_: Description and Usage Details
 
-## Overview
+## Overview of _**VCFpipe**_
 _**VCFpipe**_ is a bash-based module of SeqForge designed for comprehensive filtering of VCF (Variant Call Format) files containing genetic variant (SNPs and indels) and invariant sites. It provides a unified framework to apply multiple layers of site and genotype filtering, as well as the detection of potential paralogous sites.
 
 ## Key Features
@@ -196,16 +196,16 @@ Additionally, **R** packages `vcfR`, `ggplot2`, `dpyr`, and `stringr` must be in
 ### Input Files
 To run, _**vcfpipe**_ requires the creation of a working directory containing a single VCF file. This file can be uncompressed or gzip-compressed and can contain only variant sites or both invariant and variant sites. If a VCF file containing both variant and invariant sites is provided as input, _**vcfpipe**_ will automatically detect it and run all filters on minor alleles (`--min-mac`, `--maf`,  and `--paralogs`) solely on variant sites. Note that output files change depending on whether the input VCF file contains only variant or both variant and invariant sites (see [Output Files](#output-files)).
 
-### Running the pipeline
-The pipeline is executed via a single ommand passing the necessary parameters:
+### Running the module
+The module is executed via a single ommand passing the necessary parameters:
 ```
-vcfsentry [options] <file.vcf(.gz)> <working_directory>
-vcfsentry version (to print the version of the software)
+SeqForge vcfpipe [options] <file.vcf(.gz)> <working_directory>
+SeqForge vcfpipe version (to print the version of the software)
 
 Example:
-vcfsentry --maf 0.02 --minQ 30 --max-depth Li2014 --paralogs 1:5 --no-indels --no-multiallelic MyRawData.vcf.gz Vcf-Sentry/my_working_dir
+SeqForge vcfpipe --maf 0.02 --minQ 30 --max-depth Li2014 --paralogs 1:5 --no-indels --no-multiallelic MyRawData.vcf.gz vcfpipe/my_working_dir
 
-In this example, the working directory "VCF-Sentry/my_working_dir" must contain a single VCF file, "MyRawData.vcf.gz".
+In this example, the working directory "vcfpipe/my_working_dir" must contain a single VCF file, "MyRawData.vcf.gz".
 ```
 There are only two requirements for _**vcfpipe**_ to run:
 1. `<file.vcf(.gz)>`: The name of the VCF file to be filtered (_**ONLY**_ the file name - not the path to the VCF file - with its extension (e.g., .vcf). This file can be either uncompressed or gzip-compressed.
@@ -257,7 +257,7 @@ Options to be passed to the module:
 ```
 
 ### Output Files
-The pipeline generates several intermediate and final files in the working directory. Key files include:
+The module generates several intermediate and final files in the working directory. Key files include:
 | **File** | **Description** |
 |:------------|:-------------|
 | FinalSNPs.vcf.gz | Final filtered VCF (when input VCF contains only variant sites) |
