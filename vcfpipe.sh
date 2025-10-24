@@ -29,8 +29,8 @@ To run properly, vcfpipe needs the following dependencies:
 ** Note that dependencies are not provided with the module and must either be downloaded or loaded as modules by the user **
 
 Before running the vcfpipe module, make sure that SeqForge and vcfpipe dependencies are added to your path (if installed locally) using the command lines below:
-export PATH=/path_to_dependencies/:$PATH
-export PATH=/path_to_SeqForge/:$PATH
+export PATH=/path_to_dependencies/Dependencies/:$PATH
+export PATH=/path_to_SeqForge/SeqForge/:$PATH
 !!! If dependencies are loaded as modules, you need not export any paths !!!
 
 Reference (argument -m, --max-depth)

@@ -22,7 +22,7 @@
 usage='
 genopipe version 1.0.0 Copyright (C) 2025 Lionel Di Santo
 
-genopipe is a is a bash-based module of SeqForge for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
+genopipe is a bash-based module of SeqForge for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
 
 To run properly, genopipe needs the following dependencies:
 - samtools
@@ -37,8 +37,8 @@ To run properly, genopipe needs the following dependencies:
 ** Note that dependencies are not provided with the module and must either be downloaded or loaded as modules by the user **
 
 Before running the genopipe module, make sure that SeqForge and genopipe dependencies are added to your path (if installed locally) using the command lines below:
-export PATH=/path_to_dependencies/:$PATH
-export PATH=/path_to_SeqForge/:$PATH
+export PATH=/path_to_dependencies/Dependencies/:$PATH
+export PATH=/path_to_SeqForge/SeqForge/:$PATH
 !!! If dependencies are loaded as modules, you need not export any paths !!!
 
 genopipe uses specific patterns in file names to run and hence all sequence files **MUST** follow a specific naming convention:
