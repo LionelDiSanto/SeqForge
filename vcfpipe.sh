@@ -38,8 +38,8 @@ Li, H. (2014). Toward better understanding of artifacts in variant calling from 
 Bioinformatics, 30(20), 2843-2851. https://doi.org/10.1093/bioinformatics/btu356
 
 Reference (argument -p, --paralogs)
-McKinney, G.J., Waples, R.K., Seeb, L.W. and Seeb, J.E. (2017), Paralogs are revealed by proportion of heterozygotes and deviations in read ratios in 
-genotyping-by-sequencing data from natural populations. Mol Ecol Resour, 17: 656-669. https://doi.org/10.1111/1755-0998.12613
+McKinney, G.J., Waples, R.K., Seeb, L.W. and Seeb, J.E. (2017). Paralogs are revealed by proportion of heterozygotes and deviations in read ratios in 
+genotyping-by-sequencing data from natural populations. Molecular Ecology Resources, 17, 656-669. https://doi.org/10.1111/1755-0998.12613
 
 USAGE
 SeqForge vcfpipe [options] <file.vcf(.gz)> <working_directory>
@@ -72,15 +72,17 @@ Options to be passed to the module:
                                         individuals) > x times the mean read depth across variants are removed. If 'none' is provided (-m, --max-depth none), no filtering based on site mean depth will be performed.
                                         If a numerical value is provided (e.g., -m, --max-depth 100), then sites with mean read depth (over all individuals) > than the provided value (e.g., 100) will be removed.
                                         Default is 'none'.
-    -p, --paralogs          <string>    This argument takes the two following values: none or x:y. If 'x:y' is provided, genetic variants likely stemming from the mapping of paralogous sequences will be identified
-                                        and removed from the VCF file. Identification of paralogs necessitate two parameters, namely x and y. x fixes the upper threshold for the proportion of heterozygotes [H, ranges 
-                                        from >0 to 1]; any sites with heterozygosity above this threshold will be discarded. y fixes the upper limit for the deviation of ratios from the expected 50:50 [D, range from 
-                                        -inf to inf], calcuated as a z-score. In other words, this parameter defines how many standard deviations the observed A:B allele ratio at a given site is allowed to deviate from 
-                                        the expected 50:50 balance. This parameter thus filters sites with strong allelic imbalance. Note that when using this parameter, it is best to use only bi-allelic genetic markers. 
-                                        This option supports multi-allelic genetic markers, but sites with more than two alleles are ignored during heterozygosity and allelic imbalance filtering. If 'none' is provided, 
-                                        no filtering of paralogs will be performed. To use this option, R package vcfR, ggplot2, dplyr, and stringr must be installed. Double-check that the packages are installed for the 
-                                        R version loaded or exported. If an R repository containing vcfR, ggplot2, dplyr, and stringr packages is missing, the module will return an error. Default is 'none'.
-    -t, --threads           <integer>   Set the number of threads to use for analysis [default: 1]. 
+    -p, --paralogs          <string>    This argument takes one of the following values: none or x:y. If 'x:y' is provided, genetic variants likely stemming from the mapping of paralogous sequences will be identified
+                                        and removed from the VCF file. Identification of paralogs necessitates two parameters, namely x and y. x fixes the upper threshold for the proportion of heterozygotes 
+                                        [H, ranges from >0 to 1]; any sites with heterozygosity above this threshold will be discarded. y fixes the upper limit for the deviation of ratios from the expected 50:50 
+                                        [D, range from -inf to inf], calcuated as a z-score. In other words, this parameter defines how many standard deviations the observed A:B allele ratio at a given heterozygous
+                                        site is allowed to deviate from the expected 50:50 balance. This parameter thus filters sites with strong allelic imbalance. Note that when using this parameter, it is best to
+                                        use only bi-allelic genetic markers. This option supports multi-allelic genetic markers, but sites with more than two alleles are ignored during heterozygosity and allelic imbalance
+                                        filtering. For more details on this approach and how to select H and D thresholds, please refer to the original paper by McKinney et al. 2017 (see above for the full reference). 
+                                        If 'none' is provided, no filtering of paralogs will be performed. To use this option, R package vcfR, ggplot2, dplyr, and stringr must be installed. Double-check that the packages
+                                        are installed for the R version loaded or exported. If an R repository containing vcfR, ggplot2, dplyr, and stringr packages is missing, the module will return an error.
+                                        Default is 'none'.
+    -t, --threads           <integer>   Set the number of threads to use for analysis. Default is 1. 
     -b, --no-multiallelic               If specified (-b, --no-multiallelic), this argument triggers the exclusion of multiallelic sites, so only biallelic single-nucleotide polymorphisms and 
                                         indels are kept.
     -e, --no-indels                     If specified (-e, --no-indels), this argument triggers the exclusion of indels, so that exclusively single-nucleotide polymorphisms are kept (either biallelic 
