@@ -67,11 +67,11 @@ Options to be passed to the module:
     -s, --wd-size           <integer>   Window size used during linkage desequilibrium filtering (in bp). For more details, see above (-r, --r2).
     -z, --min-depth         <integer>   Minimum average read depth (over all individuals). Include only sites with a mean read depth over all individual greater than or equal to this value. Default valus is 5.
     -m, --max-depth         <string>    This argument takes one of the following values: Li2014, mean:x, none, or a numerical value. If 'Li2014' is provided (-m, --max-depth Li2014), then filtering of sites 
-                        or  <integer>   based on maximum read depth following recommendations by Li 2014 is performed; sites with mean depth (over all individuals) > d+4*sqrt(d), where d is the average read 
-                                        depth across variants, are removed. If 'mean:x' is provided (e.g., -m, --max-depth mean:2), where x must be a numerical value, then sites with mean read depth (over all
-                                        individuals) > x times the mean read depth across variants are removed. If 'none' is provided (-m, --max-depth none), no filtering based on site mean depth will be performed.
-                                        If a numerical value is provided (e.g., -m, --max-depth 100), then sites with mean read depth (over all individuals) > than the provided value (e.g., 100) will be removed.
-                                        Default is 'none'.
+                        or  <integer>   based on maximum read depth following recommendations by Li 2014 is performed (see above for full reference); sites with mean depth (over all individuals) > d+4*sqrt(d),
+                                        where d is the average read depth across variants, are removed. If 'mean:x' is provided (e.g., -m, --max-depth mean:2), where x must be a numerical value, then sites with
+                                        mean read depth (over all individuals) > x times the mean read depth across variants are removed. If 'none' is provided (-m, --max-depth none), no filtering based on site
+                                        mean depth will be performed. If a numerical value is provided (e.g., -m, --max-depth 100), then sites with mean read depth (over all individuals) > than the provided value
+                                        (e.g., 100) will be removed. Default is 'none'.
     -p, --paralogs          <string>    This argument takes one of the following values: none or x:y. If 'x:y' is provided, genetic variants likely stemming from the mapping of paralogous sequences will be identified
                                         and removed from the VCF file. Identification of paralogs necessitates two parameters, namely x and y. x fixes the upper threshold for the proportion of heterozygotes 
                                         [H, ranges from >0 to 1]; any sites with heterozygosity above this threshold will be discarded. y fixes the upper limit for the deviation of ratios from the expected 50:50 
