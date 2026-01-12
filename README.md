@@ -227,6 +227,14 @@ There are only two requirements for _**vcfpipe**_ to run:
 #### All Available Options in _**vcfpipe**_
 In addition to the two requied parameters, several options may be specified and passed to _**vcfpipe**_ to custumize each run:
 ```
+Reference (argument -m, --max-depth)
+Li, H. (2014). Toward better understanding of artifacts in variant calling from high-coverage samples.
+Bioinformatics, 30(20), 2843-2851. https://doi.org/10.1093/bioinformatics/btu356
+
+Reference (argument -p, --paralogs)
+McKinney, G.J., Waples, R.K., Seeb, L.W. and Seeb, J.E. (2017). Paralogs are revealed by proportion of heterozygotes and deviations in read ratios in 
+genotyping-by-sequencing data from natural populations. Molecular Ecology Resources, 17, 656-669. https://doi.org/10.1111/1755-0998.12613
+
 Options to be passed to the module:
     -h, --help                          Show this help page.
     -n, --missing-ind       <float>     This parameter filters the data according to per individual fraction of missing data (range between 0 and 1). All individuals within the provided VCF file
