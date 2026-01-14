@@ -83,7 +83,7 @@ By default, _**genopipe**_ uses _SAMtools_ to sort BAM files by genomic coordina
 This step can be disabled in _**genopipe**_ with the option `--no-dedup`.
                     
 ### Calling of Genetic Variants with _BCFtools_
-First, _**genopipe**_ uses _BCFtools_ to generate a coverage profile with _mpileup_, selecting the Illumina-specific configuration profile (`--config illumina`) and forcing the calculation of the **B**ase **A**lignment **Q**uality (**BAQ**) for all reads and not just those in issue-prone regions (`--full-BAQ`). By default, the maximum number of reads considered per site to produce the coverage profile is limited to 250, although this limit can be adjusted in _**genopipe**_ with the option `--depth`. Then Single-nucleotide (SNPs) and Insertion/Deletion (Indels) polymorphisms are called using the _call_ subcommand assuming the multiallelic and rare-variant calling model (`--multiallelic-caller`) without any _a priori_ expectations on the substitution rate (`--prior 0`). Samples are by default assumed to be diploid but this can be adjusted in _**genopipe**_ using the option `--ploidy`. Finally, _**genopipe**_ will by default report only variant sites in the output VCF file. If invariant sites, in addition to variant sites, wish to be inclued in the output VCF file, the option `--invariant` must be specified. Note, however, that reporting invariant sites may result in an _**EXTREMELY**_ large VCF file. Finally, both coverage profile generation and genetic variant calling are performed across samples (and not per sample). _**Genopipe**_ automatically assesses grouping information (i.e., Population ID - see [Input Files](#input-files)) to enable accurate genotype assignment across multiple samples.
+First, _**genopipe**_ uses _BCFtools_ to generate a coverage profile with _mpileup_, selecting the Illumina-specific configuration profile (`--config illumina`) and forcing the calculation of the **B**ase **A**lignment **Q**uality (**BAQ**) for all reads and not just those in issue-prone regions (`--full-BAQ`). By default, the maximum number of reads considered per site to produce the coverage profile is limited to 250, although this limit can be adjusted in _**genopipe**_ with the option `--depth`. Then Single-nucleotide (SNPs) and Insertion/Deletion (Indels) polymorphisms are called using the _call_ subcommand assuming the multiallelic and rare-variant calling model (`--multiallelic-caller`) without any _a priori_ expectations on the substitution rate (`--prior 0`). Note that while no _a priori_ expectation on the substitution rate is assumed by default, this can be can be changed by the user using the `--prior` option in _**genopipe**_. Additionally, samples are by default assumed to be diploid but this can be adjusted in the module using the option `--ploidy`. Finally, _**genopipe**_ will by default report only variant sites in the output VCF file. If invariant sites, in addition to variant sites, wish to be inclued in the output VCF file, the option `--invariant` must be specified. Note, however, that reporting invariant sites may result in an _**EXTREMELY**_ large VCF file. Importantly, both coverage profile generation and genetic variant calling are performed across samples (and not per sample). _**Genopipe**_ automatically assesses grouping information (i.e., Population ID - see [Input Files](#input-files)) to enable accurate genotype assignment across multiple samples.
 
 ## Getting Started
 
@@ -163,13 +163,15 @@ Options to be passed to the module:
     -t, --threads           <integer>   Set the number of threads to use for analysis [default: 1].
     -p, --ploidy            <integer>   Ploidy of samples assumed for analysis [default: 2 (diploid)].
     -d, --depth             <integer>   Number of reads considered per BAM file for SNP calling [default: 250].
+    -s, --prior             <float>     Expected substitution rate assumed during variant calling. Providing a value of zero (0) disables the use of
+                                        this prior during variant calling [default 0].
     -m, --match             <integer>   Matching score to be passed to aligner [default: 1]. Note that this parameter is needed only when using BWA mem 
                                         as the read mapping program.
     -i, --mismatch          <integer>   Mismatch penalty score to be passed to aligner [default: 4].
     -o, --gapopen           <integer>   Gap open penalty score to be passed to aligner [default: 6].
     -q, --min-mapQual       <integer>   If -u, --1m-concordant is specified, then specifying a value > 0 for this argument will implement an additional
                                         filter where alignments with a mapping quality less than this value will be discarded from BAM files [default: 20].
-                                        Specifying a value of 0 disables this filter.     
+                                        Specifying a value of 0 disables this filter.  
 ```
 
 ### Output Files
