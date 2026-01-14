@@ -99,6 +99,8 @@ Options to be passed to the module:
     -t, --threads           <integer>   Set the number of threads to use for analysis [default: 1].
     -p, --ploidy            <integer>   Ploidy of samples assumed for analysis [default: 2 (diploid)].
     -d, --depth             <integer>   Number of reads considered per BAM file for SNP calling [default: 250].
+    -s, --prior             <float>     Expected substitution rate assumed during variant calling. Providing a value of zero (0) disables the use of
+                                        this prior during variant calling [default 0].
     -m, --match             <integer>   Matching score to be passed to aligner [default: 1]. Note that this parameter is needed only when using BWA mem 
                                         as the read mapping program.
     -i, --mismatch          <integer>   Mismatch penalty score to be passed to aligner [default: 4].
@@ -115,7 +117,7 @@ if [[ $# -eq 0 ]]
         exit 0
 fi
 
-PARSED_OPTIONS=$(getopt -o hwcbuxgt:p:d:m:i:o:q: -l help,invariant,discordant,bowtie2,1m-concordant,no-dedup,trim-polyG,threads:,ploidy:,depth:,match:,mismatch:,gapopen:,min-mapQual: -- "$@")
+PARSED_OPTIONS=$(getopt -o hwcbuxgt:p:d:s:m:i:o:q: -l help,invariant,discordant,bowtie2,1m-concordant,no-dedup,trim-polyG,threads:,ploidy:,depth:,prior:,match:,mismatch:,gapopen:,min-mapQual: -- "$@")
 if [[ $? -ne 0 ]]; then echo -e "\nError with parsing arguments\n"; exit 1; fi
 eval set -- "$PARSED_OPTIONS"
 
@@ -159,6 +161,10 @@ while true; do
             ;;
         -d|--depth)
             depth="$2"
+            shift 2
+            ;;
+        -s|--prior)
+            prior="$2"
             shift 2
             ;;
         -m|--match)
@@ -381,6 +387,13 @@ if [ $mode = all ] || [ $mode = SNPcalling ] || [ $mode = mapping_SNPcalling ]
             depth=250
         else
             echo "Number of reads considered per BAM file for SNP calling: $depth"
+    fi
+    if [ -z $prior ]
+        then
+            echo "No prior expectation on substitution rate assumed during SNP calling (default value is 0)"
+            prior=0
+        else
+            echo "Expected substitution rate assumed during SNP calling: $prior"
     fi
     echo ""
 fi
@@ -721,9 +734,9 @@ then
     rm join1 join2
     if [ -z $invariant ]
         then
-            bcftools mpileup -f $1 --threads $threads --max-depth $depth --bam-list ./mybamlist.txt -a DP,QS,AD --full-BAQ --config illumina | bcftools call -o RawSNPs.vcf.gz -Oz --threads $threads --ploidy $ploidy --variants-only -m --prior 0 -G groups.txt
+            bcftools mpileup -f $1 --threads $threads --max-depth $depth --bam-list ./mybamlist.txt -a DP,QS,AD --full-BAQ --config illumina | bcftools call -o RawSNPs.vcf.gz -Oz --threads $threads --ploidy $ploidy --variants-only -m --prior $prior -G groups.txt
         else
-            bcftools mpileup -f $1 --threads $threads --max-depth $depth --bam-list ./mybamlist.txt -a DP,QS,AD --full-BAQ --config illumina | bcftools call -o RawSNPs.vcf.gz -Oz --threads $threads --ploidy $ploidy -m --prior 0 -G groups.txt
+            bcftools mpileup -f $1 --threads $threads --max-depth $depth --bam-list ./mybamlist.txt -a DP,QS,AD --full-BAQ --config illumina | bcftools call -o RawSNPs.vcf.gz -Oz --threads $threads --ploidy $ploidy -m --prior $prior -G groups.txt
     fi
 fi
 
