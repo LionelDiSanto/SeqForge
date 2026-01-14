@@ -161,7 +161,7 @@ Options to be passed to the module:
     -g, --trim-polyG                    If, -g, --trim-polyG is specified, then poly-G tails at the end of reads will be forcefully trimmed. This extra
                                         read filtering step is highly recommended when working with Illumina NextSeq/NovaSeq data.
     -t, --threads           <integer>   Set the number of threads to use for analysis [default: 1].
-    -p, --ploidy            <integer>   Ploidy of samples assumed for analysis [default: 2 (diploid)].
+    -p, --ploidy            <integer>   Ploidy of samples assumed for SNP calling [default: 2 (diploid)].
     -d, --depth             <integer>   Number of reads considered per BAM file for SNP calling [default: 250].
     -s, --prior             <float>     Expected substitution rate assumed during variant calling. Providing a value of zero (0) disables the use of
                                         this prior during variant calling [default: 0].
