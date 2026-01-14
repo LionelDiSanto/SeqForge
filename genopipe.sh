@@ -100,7 +100,7 @@ Options to be passed to the module:
     -p, --ploidy            <integer>   Ploidy of samples assumed for analysis [default: 2 (diploid)].
     -d, --depth             <integer>   Number of reads considered per BAM file for SNP calling [default: 250].
     -s, --prior             <float>     Expected substitution rate assumed during variant calling. Providing a value of zero (0) disables the use of
-                                        this prior during variant calling [default 0].
+                                        this prior during variant calling [default: 0].
     -m, --match             <integer>   Matching score to be passed to aligner [default: 1]. Note that this parameter is needed only when using BWA mem 
                                         as the read mapping program.
     -i, --mismatch          <integer>   Mismatch penalty score to be passed to aligner [default: 4].
