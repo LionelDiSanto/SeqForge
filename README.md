@@ -28,12 +28,12 @@ The pipeline is engineered to handle **raw (demultiplexed) paired-end read files
 In summary, **SeqForge** provides a unified and systematic framework to take raw Illumina data through the essential steps of alignment, quality control, and robust variant filtering, yielding a high-confidence set of SNPs (and Indels).
 
 # Installation
-1. Clone the repository
+1. Clone the repository:
 ```
 git clone https://github.com/LionelDiSanto/SeqForge.git
 cd SeqForge
 ```
-2. Convert files from DOS line endings to Unix line endings (if needed) and make the script executable
+2. Convert files from DOS line endings to Unix line endings (if needed) and make the script executable:
 ```
 dos2unix * && chmod +x *
 ```
