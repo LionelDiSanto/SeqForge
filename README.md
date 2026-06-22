@@ -328,7 +328,7 @@ Shen, W., Botond S., & Liuyang Z. (2024). SeqKit2: A Swiss Army Knife for Sequen
 Bonfield, J.K., Marshall, J., Danecek, P., Li, H., Ohan, V., Whitwham, A., Keane, T., & Davies, R.M. (2021). HTSlib: C library for reading/writing high-throughput sequencing data. _GigaScience_, **10**(2), giab007. https://doi.org/10.1093/gigascience/giab007
 
 ### R
-R Core Team (2025). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria. https://www.R-project.org/
+R Core Team (2026). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria. https://doi.org/10.32614/R.manuals
 
 # Contacts
 For questions or to report issues, please contact Dr. Lionel Di Santo (lionel.disanto@unibas.ch).
