@@ -334,7 +334,7 @@ R Core Team (2026). R: A Language and Environment for Statistical Computing. R F
 For questions or to report issues, please contact Dr. Lionel Di Santo (lionel.disanto@unibas.ch).
 
 # How to cite **SeqForge**?
-_coming soon_
+Di Santo L., Narasimhan A., Flury J., Felber J., Bachmann O., Riedl S., and Willi Y. (in review). Genomic diversity of populations along elevational gradients in Brassicaceae species. *Annals of Botany*.
 
 # Contribution
 **Want to make SeqForge better?** We highly encourage contributions! Whether it's reporting a bug, suggesting a new feature for _**genopipe**_ or _**vcfpipe**_, or submitting code, your efforts are valuable.
