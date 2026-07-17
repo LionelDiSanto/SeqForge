@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #----------------#
-# vcfpipe v1.0.0 #
+# vcfpipe v1.0.1 #
 #----------------#
 
 #--- Dependencies ---#
@@ -16,7 +16,7 @@
 
 #--- module Help and definition of all flags ---#
 usage='
-vcfpipe version 1.0.0 Copyright (C) 2025 Lionel Di Santo
+vcfpipe version 1.0.1 Copyright (C) 2026 Lionel Di Santo
 
 vcfpipe is a bash-based module of SeqForge designed for comprehensive filtering of VCF (Variant Call Format) files containing genetic variant (SNPs and indels) and invariant sites. It provides a unified framework to apply multiple layers of site and genotype filtering, as well as the detection of potential paralogous sites.
 
@@ -184,7 +184,7 @@ done
 if [ $# -eq 1 ] && [ $1 = version ]
     then
         echo ""
-        echo "vcfpipe version 1.0.0 Copyright (C) 2025 Lionel Di Santo"
+        echo "vcfpipe version 1.0.1 Copyright (C) 2026 Lionel Di Santo"
         echo ""
         exit 0
 fi
@@ -223,7 +223,7 @@ cd $2
 #--- Welcome message ---#
 echo ""
 echo "#----------------------------------------------------------#"
-echo "# vcfpipe version 1.0.0 Copyright (C) 2025 Lionel Di Santo #"
+echo "# vcfpipe version 1.0.1 Copyright (C) 2026 Lionel Di Santo #"
 echo "#----------------------------------------------------------#"
 program=("R" "vcftools" "bcftools" "htsfile")
 for i in ${program[@]}
@@ -703,7 +703,7 @@ if [[ $check -eq 0 ]]
                         bcftools view -R keep_paralogs.txt -Oz -o variant_mac_maf_FiltD.vcf.gz variant_mac_maf_sorted.vcf.gz >> bcftools.log 2>&1
                         bcftools sort -o variant_mac_maf_FiltD_sorted.vcf.gz -T . variant_mac_maf_FiltD.vcf.gz > /dev/null 2>&1
                         bcftools index --threads $threads variant_mac_maf_FiltD_sorted.vcf.gz
-                        bcftools concat --threads $threads --allow-overlaps --rm-dups all -Oz -o FinalSNPs_variant_invariant.vcf.gz invariant_sorted.vcf.gz variant_mac_maf_FiltD_sorted.vcf.gz >> bcftools.log 2>&1
+                        bcftools concat --threads $threads --allow-overlaps -Oz -o FinalSNPs_variant_invariant.vcf.gz invariant_sorted.vcf.gz variant_mac_maf_FiltD_sorted.vcf.gz >> bcftools.log 2>&1
                         mv variant_mac_maf_FiltD_sorted.vcf.gz FinalSNPs_variant.vcf.gz
                         mv invariant_sorted.vcf.gz FinalSNPs_invariant.vcf.gz
                         rm variant* invariant*
@@ -714,7 +714,7 @@ if [[ $check -eq 0 ]]
                         bcftools sort -o variant_mac_maf_sorted.vcf.gz -T . variant_mac_maf.recode.vcf.gz > /dev/null 2>&1
                         bcftools index --threads $threads invariant_sorted.vcf.gz
                         bcftools index --threads $threads variant_mac_maf_sorted.vcf.gz
-                        bcftools concat --threads $threads --allow-overlaps --rm-dups all -Oz -o FinalSNPs_variant_invariant.vcf.gz invariant_sorted.vcf.gz variant_mac_maf_sorted.vcf.gz >> bcftools.log 2>&1
+                        bcftools concat --threads $threads --allow-overlaps -Oz -o FinalSNPs_variant_invariant.vcf.gz invariant_sorted.vcf.gz variant_mac_maf_sorted.vcf.gz >> bcftools.log 2>&1
                         mv variant_mac_maf.recode.vcf.gz FinalSNPs_variant.vcf.gz
                         mv invariant.recode.vcf.gz FinalSNPs_invariant.vcf.gz
                         rm variant* invariant*
@@ -727,7 +727,7 @@ if [[ $check -eq 0 ]]
                 bcftools sort -o variant_mac_maf_sorted.vcf.gz -T . variant_mac_maf.recode.vcf.gz > /dev/null 2>&1
                 bcftools index --threads $threads invariant_sorted.vcf.gz
                 bcftools index --threads $threads variant_mac_maf_sorted.vcf.gz
-                bcftools concat --threads $threads --allow-overlaps --rm-dups all -Oz -o FinalSNPs_variant_invariant.vcf.gz invariant_sorted.vcf.gz variant_mac_maf_sorted.vcf.gz >> bcftools.log 2>&1
+                bcftools concat --threads $threads --allow-overlaps -Oz -o FinalSNPs_variant_invariant.vcf.gz invariant_sorted.vcf.gz variant_mac_maf_sorted.vcf.gz >> bcftools.log 2>&1
                 mv variant_mac_maf.recode.vcf.gz FinalSNPs_variant.vcf.gz
                 mv invariant.recode.vcf.gz FinalSNPs_invariant.vcf.gz
                 rm variant* invariant*
