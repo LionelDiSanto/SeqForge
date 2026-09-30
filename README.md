@@ -42,7 +42,7 @@ dos2unix * && chmod +x *
 export PATH=/path_to_SeqForge/SeqForge/:$PATH
 ```
 
-# _**Genopipe**_: Descrption and Usage Details
+# _**Genopipe**_: Description and Usage Details
 
 ## Overview of _**Genopipe**_
 _**Genopipe**_ is a bash-based module of SeqForge for the sorting, synchronization, and filtering of raw (demultiplexed) paired-end (PE) read files produced by Illumina technologies with CASAVA 1.8+ FASTQ headers, the mapping of synchronized and filtered reads to a user-provided reference genome, the removal of PCR duplicates from alignment files, and finally the calling of genetic variants (SNPs and Indels).
